@@ -7,6 +7,12 @@ void infoToHex(uint8_t* data, size_t size){
     }
 }
 
+void infoToText(uint8_t* data, size_t size){
+    for(size_t pos = 0; pos < size; pos++){
+        printf("%s", data[pos]);
+    }
+}
+
 int main(int argc, char* argv[]){
     nfc_device* dev;
     nfc_context* context;
@@ -31,13 +37,17 @@ int main(int argc, char* argv[]){
     };
     printf("Please scan your NFC tag...\r\n");
     if(nfc_initiator_select_passive_target(dev, nmMifare, NULL, 0, &nfcTarget) > 0){
-        if(argc <= 2){
+        if(argc < 2){
             printf("UID: ");
             infoToHex(nfcTarget.nti.nai.abtUid, nfcTarget.nti.nai.szUidLen);
             printf("\r\n");
         }
+        else if(argv[1][1] == 'd'){
+            printf("Fetching Card Data!\r\n");
+            infoToText(nfcTarget.nti.nai.abtAts, nfcTarget.nti.nai.szAtsLen);
+        }
         else{
-            printf("Dev info: ");
+            printf(argv[1]);
         }
     }
     nfc_close(dev);
