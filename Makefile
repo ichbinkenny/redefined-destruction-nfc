@@ -1,4 +1,4 @@
-LIBS = -lnfc
+LIBS = -lnfc -lfreefare
 main:
 	gcc -o readNFCTag ./scanNFCTag.c $(LIBS)
 
